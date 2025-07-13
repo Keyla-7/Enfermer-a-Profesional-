@@ -43,3 +43,35 @@ h1 {
   opacity: 0.5;
   cursor: not-allowed;
 }
+.progreso-anio-container {
+  width: 90%;
+  max-width: 600px;
+  margin: 0 auto 20px auto;
+  background-color: #ffd1e8;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  height: 20px;
+  box-shadow: inset 0 0 5px #d10077;
+}
+
+.progreso-bar-anio {
+  height: 100%;
+  width: 0%;
+  background-color: #d10077;
+  border-radius: 20px 0 0 20px;
+  transition: width 0.4s ease;
+}
+
+.progreso-text-anio {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  line-height: 20px;
+  user-select: none;
+  font-size: 0.9em;
+}
