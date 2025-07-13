@@ -34,7 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-// Función para actualizar progreso por año
+
+  // Función para actualizar progreso por año
   function actualizarProgresoPorAnio() {
     const anios = document.querySelectorAll("section.anio");
 
@@ -50,17 +51,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const porcentaje = total === 0 ? 0 : Math.round((aprobadosCount / total) * 100);
 
       const barra = seccion.querySelector(".progreso-bar-anio");
-      const texto = seccion.querySelector(".progreso-text-anio");
-
-      if (barra && texto) {
+      // Actualizamos sólo la barra, no el texto
+      if (barra) {
         barra.style.width = porcentaje + "%";
-        texto.textContent = porcentaje + "% completado";
       }
     });
   }
-  
+
   actualizarDesbloqueos();
-  actualizarProgesoPoranio();
+  actualizarProgresoPorAnio();
 
   // Click para aprobar o desaprobar
   ramos.forEach(ramo => {
@@ -82,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Guardar en localStorage
       localStorage.setItem("ramosAprobados", JSON.stringify(aprobados));
 
-      // Actualizar desbloqueos
+      // Actualizar desbloqueos y progreso
       actualizarDesbloqueos();
       actualizarProgresoPorAnio();
     });
