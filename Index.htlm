@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malla Curricular Interactiva</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Malla Curricular Interactiva - Primer Año</h1>
+  <div class="malla">
+    <div class="ramo" data-nombre="Antropología">Antropología</div>
+    <div class="ramo" data-nombre="Entornos virtuales">Entornos virtuales</div>
+    <div class="ramo" data-nombre="Comprensión lectora">Comprensión lectora</div>
+    <div class="ramo" data-nombre="Bases del cuidado">Bases del cuidado</div>
+    <div class="ramo" data-nombre="Prácticas profesionalizantes 1" data-requiere='["Bases del cuidado"]'>Prácticas profesionalizantes 1</div>
+    <div class="ramo" data-nombre="Salud pública y comunitaria">Salud pública y comunitaria</div>
+    <div class="ramo" data-nombre="Matemáticas">Matemáticas</div>
+    <div class="ramo" data-nombre="Fisico-Química">Fisico-Química</div>
+    <div class="ramo" data-nombre="Morfofisiología">Morfofisiología</div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
