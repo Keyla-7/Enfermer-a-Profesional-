@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   
   actualizarDesbloqueos();
-  actualizarProgesoporanio();
+  actualizarProgesoPoranio();
 
   // Click para aprobar o desaprobar
   ramos.forEach(ramo => {
@@ -84,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Actualizar desbloqueos
       actualizarDesbloqueos();
+      actualizarProgresoPorAnio();
     });
   });
 });
