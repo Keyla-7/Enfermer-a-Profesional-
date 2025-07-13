@@ -34,8 +34,33 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+// Función para actualizar progreso por año
+  function actualizarProgresoPorAnio() {
+    const anios = document.querySelectorAll("section.anio");
 
+    anios.forEach(seccion => {
+      const ramosDelAnio = seccion.querySelectorAll(".ramo");
+      const total = ramosDelAnio.length;
+      let aprobadosCount = 0;
+
+      ramosDelAnio.forEach(ramo => {
+        if (ramo.classList.contains("aprobado")) aprobadosCount++;
+      });
+
+      const porcentaje = total === 0 ? 0 : Math.round((aprobadosCount / total) * 100);
+
+      const barra = seccion.querySelector(".progreso-bar-anio");
+      const texto = seccion.querySelector(".progreso-text-anio");
+
+      if (barra && texto) {
+        barra.style.width = porcentaje + "%";
+        texto.textContent = porcentaje + "% completado";
+      }
+    });
+  }
+  
   actualizarDesbloqueos();
+  actualizarProgesoporanio();
 
   // Click para aprobar o desaprobar
   ramos.forEach(ramo => {
