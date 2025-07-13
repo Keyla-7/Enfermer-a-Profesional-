@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const ramos = document.querySelectorAll(".ramo");
   const ramoMap = {};
-  const aprobados = JSON.parse(localStorage.getItem("ramosAprobados") || "[]");
+  let aprobados = JSON.parse(localStorage.getItem("ramosAprobados") || "[]");
 
   // Mapear y aplicar estado inicial
   ramos.forEach(ramo => {
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Desbloquear en base a los ya aprobados
+  // Función para actualizar desbloqueos basado en requisitos y aprobados
   function actualizarDesbloqueos() {
     ramos.forEach(ramo => {
       const nombre = ramo.dataset.nombre;
@@ -29,25 +29,35 @@ document.addEventListener("DOMContentLoaded", () => {
       const todosAprobados = requiere.every(r => ramoMap[r]?.classList.contains("aprobado"));
       if (todosAprobados) {
         ramo.classList.remove("bloqueado");
+      } else {
+        ramo.classList.add("bloqueado");
       }
     });
   }
 
   actualizarDesbloqueos();
 
-  // Click para aprobar
+  // Click para aprobar o desaprobar
   ramos.forEach(ramo => {
     ramo.addEventListener("click", () => {
       const nombre = ramo.dataset.nombre;
 
-      if (ramo.classList.contains("aprobado") || ramo.classList.contains("bloqueado")) return;
+      if (ramo.classList.contains("bloqueado")) return;
 
-      ramo.classList.add("aprobado");
+      if (ramo.classList.contains("aprobado")) {
+        // Desmarcar ramo
+        ramo.classList.remove("aprobado");
+        aprobados = aprobados.filter(n => n !== nombre);
+      } else {
+        // Marcar ramo aprobado
+        ramo.classList.add("aprobado");
+        aprobados.push(nombre);
+      }
 
       // Guardar en localStorage
-      const nuevosAprobados = [...new Set([...aprobados, nombre])];
-      localStorage.setItem("ramosAprobados", JSON.stringify(nuevosAprobados));
+      localStorage.setItem("ramosAprobados", JSON.stringify(aprobados));
 
+      // Actualizar desbloqueos
       actualizarDesbloqueos();
     });
   });
