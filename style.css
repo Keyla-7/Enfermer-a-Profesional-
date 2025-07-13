@@ -43,6 +43,7 @@ h1 {
   opacity: 0.5;
   cursor: not-allowed;
 }
+/* Barras de progreso por año */
 .progreso-anio-container {
   width: 90%;
   max-width: 600px;
