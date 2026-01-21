@@ -26,7 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (ramo.classList.contains("aprobado")) return;
 
       const requiere = JSON.parse(ramo.dataset.requiere || "[]");
-      const todosAprobados = requiere.every(r => ramoMap[r]?.classList.contains("aprobado"));
+      const todosAprobados = requiere.every(r =>
+        ramoMap[r]?.classList.contains("aprobado")
+      );
+
       if (todosAprobados) {
         ramo.classList.remove("bloqueado");
       } else {
@@ -48,20 +51,21 @@ document.addEventListener("DOMContentLoaded", () => {
         if (ramo.classList.contains("aprobado")) aprobadosCount++;
       });
 
-      const porcentaje = total === 0 ? 0 : Math.round((aprobadosCount / total) * 100);
+      const porcentaje =
+        total === 0 ? 0 : Math.round((aprobadosCount / total) * 100);
 
       const barra = seccion.querySelector(".progreso-bar-anio");
-      // Actualizamos sólo la barra, no el texto
       if (barra) {
         barra.style.width = porcentaje + "%";
       }
-// 🎉 celebración si completa el año
-const anio = seccion.dataset.anio;
-if (aprobadosCount === total && total > 0) {
-  celebrarAnio(anio);
-}
-  actualizarDesbloqueos();
-  actualizarProgresoPorAnio();
+
+      // 🎉 celebración si completa el año
+      const anio = seccion.dataset.anio;
+      if (aprobadosCount === total && total > 0) {
+        celebrarAnio(anio);
+      }
+    });
+  }
 
   // Click para aprobar o desaprobar
   ramos.forEach(ramo => {
@@ -88,9 +92,13 @@ if (aprobadosCount === total && total > 0) {
       actualizarProgresoPorAnio();
     });
   });
+
+  actualizarDesbloqueos();
+  actualizarProgresoPorAnio();
 });
+
+// 🎀 FUNCIÓN DE CELEBRACIÓN (AGREGADA)
 function celebrarAnio(anio) {
-  // evitar repetir celebración
   const yaCelebrado = localStorage.getItem("celebradoAnio" + anio);
   if (yaCelebrado) return;
 
@@ -114,4 +122,4 @@ function celebrarAnio(anio) {
   setTimeout(() => {
     contenedor.remove();
   }, 3500);
-}
+        }
