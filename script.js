@@ -3,15 +3,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const ramoMap = {};
   let aprobados = JSON.parse(localStorage.getItem("ramosAprobados") || "[]");
 
-  // 👉 NUEVO: estado de cada año (para detectar cambio)
+  // 👉 estado de cada año
   const estadoAnios = {};
 
   // Mapear y aplicar estado inicial
   ramos.forEach(ramo => {
     const nombre = ramo.dataset.nombre;
-    const requiere = JSON.parse(ramo.dataset.requiere || "[]");
     ramoMap[nombre] = ramo;
 
+    const requiere = JSON.parse(ramo.dataset.requiere || "[]");
     if (requiere.length > 0) {
       ramo.classList.add("bloqueado");
     }
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Función para actualizar desbloqueos basado en requisitos y aprobados
+  // 🔒 desbloqueos por correlativas
   function actualizarDesbloqueos() {
     ramos.forEach(ramo => {
       if (ramo.classList.contains("aprobado")) return;
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Función para actualizar progreso por año
+  // 📊 progreso por año
   function actualizarProgresoPorAnio() {
     const anios = document.querySelectorAll("section.anio");
 
@@ -57,11 +57,8 @@ document.addEventListener("DOMContentLoaded", () => {
         total === 0 ? 0 : Math.round((aprobadosCount / total) * 100);
 
       const barra = seccion.querySelector(".progreso-bar-anio");
-      if (barra) {
-        barra.style.width = porcentaje + "%";
-      }
+      if (barra) barra.style.width = porcentaje + "%";
 
-      // 🎉 celebración SOLO cuando pasa de incompleto → completo
       const anio = seccion.dataset.anio;
       const completo = aprobadosCount === total && total > 0;
 
@@ -73,13 +70,39 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Click para aprobar o desaprobar
+  // 🖱️ click en ramos
   ramos.forEach(ramo => {
     ramo.addEventListener("click", () => {
       const nombre = ramo.dataset.nombre;
 
-      if (ramo.classList.contains("bloqueado")) return;
+      // 👉 SI ESTÁ BLOQUEADO → mostrar correlativas
+      if (ramo.classList.contains("bloqueado")) {
+        const requiere = JSON.parse(ramo.dataset.requiere || []);
+        const faltantes = requiere.filter(r =>
+          !ramoMap[r]?.classList.contains("aprobado")
+        );
 
+        ramo.classList.add("mostrar-correlativas");
+
+        let tooltip = ramo.querySelector(".tooltip-correlativas");
+        if (!tooltip) {
+          tooltip = document.createElement("div");
+          tooltip.className = "tooltip-correlativas";
+          tooltip.textContent =
+            "Necesitás aprobar: " + faltantes.join(", ");
+          ramo.appendChild(tooltip);
+
+          setTimeout(() => tooltip.remove(), 2500);
+        }
+
+        setTimeout(() => {
+          ramo.classList.remove("mostrar-correlativas");
+        }, 300);
+
+        return;
+      }
+
+      // 👉 marcar / desmarcar normal
       if (ramo.classList.contains("aprobado")) {
         ramo.classList.remove("aprobado");
         aprobados = aprobados.filter(n => n !== nombre);
@@ -89,7 +112,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       localStorage.setItem("ramosAprobados", JSON.stringify(aprobados));
-
       actualizarDesbloqueos();
       actualizarProgresoPorAnio();
     });
@@ -99,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
   actualizarProgresoPorAnio();
 });
 
-// 🎀 FUNCIÓN DE CELEBRACIÓN
+// 🎀 celebración
 function celebrarAnio(anio) {
   const contenedor = document.createElement("div");
   contenedor.className = "celebracion";
@@ -116,7 +138,5 @@ function celebrarAnio(anio) {
 
   document.body.appendChild(contenedor);
 
-  setTimeout(() => {
-    contenedor.remove();
-  }, 3500);
-    }
+  setTimeout(() => contenedor.remove(), 3500);
+                  }
