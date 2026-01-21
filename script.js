@@ -55,9 +55,11 @@ document.addEventListener("DOMContentLoaded", () => {
       if (barra) {
         barra.style.width = porcentaje + "%";
       }
-    });
-  }
-
+// 🎉 celebración si completa el año
+const anio = seccion.dataset.anio;
+if (aprobadosCount === total && total > 0) {
+  celebrarAnio(anio);
+}
   actualizarDesbloqueos();
   actualizarProgresoPorAnio();
 
