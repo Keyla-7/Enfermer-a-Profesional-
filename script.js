@@ -3,6 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const ramoMap = {};
   let aprobados = JSON.parse(localStorage.getItem("ramosAprobados") || "[]");
 
+  // 👉 NUEVO: estado de cada año (para detectar cambio)
+  const estadoAnios = {};
+
   // Mapear y aplicar estado inicial
   ramos.forEach(ramo => {
     const nombre = ramo.dataset.nombre;
@@ -22,7 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Función para actualizar desbloqueos basado en requisitos y aprobados
   function actualizarDesbloqueos() {
     ramos.forEach(ramo => {
-      const nombre = ramo.dataset.nombre;
       if (ramo.classList.contains("aprobado")) return;
 
       const requiere = JSON.parse(ramo.dataset.requiere || "[]");
@@ -59,11 +61,15 @@ document.addEventListener("DOMContentLoaded", () => {
         barra.style.width = porcentaje + "%";
       }
 
-      // 🎉 celebración si completa el año
+      // 🎉 celebración SOLO cuando pasa de incompleto → completo
       const anio = seccion.dataset.anio;
-      if (aprobadosCount === total && total > 0) {
+      const completo = aprobadosCount === total && total > 0;
+
+      if (completo && !estadoAnios[anio]) {
         celebrarAnio(anio);
       }
+
+      estadoAnios[anio] = completo;
     });
   }
 
@@ -75,19 +81,15 @@ document.addEventListener("DOMContentLoaded", () => {
       if (ramo.classList.contains("bloqueado")) return;
 
       if (ramo.classList.contains("aprobado")) {
-        // Desmarcar ramo
         ramo.classList.remove("aprobado");
         aprobados = aprobados.filter(n => n !== nombre);
       } else {
-        // Marcar ramo aprobado
         ramo.classList.add("aprobado");
         aprobados.push(nombre);
       }
 
-      // Guardar en localStorage
       localStorage.setItem("ramosAprobados", JSON.stringify(aprobados));
 
-      // Actualizar desbloqueos y progreso
       actualizarDesbloqueos();
       actualizarProgresoPorAnio();
     });
@@ -97,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
   actualizarProgresoPorAnio();
 });
 
-// 🎀 FUNCIÓN DE CELEBRACIÓN (AGREGADA)
+// 🎀 FUNCIÓN DE CELEBRACIÓN
 function celebrarAnio(anio) {
   const contenedor = document.createElement("div");
   contenedor.className = "celebracion";
@@ -117,4 +119,4 @@ function celebrarAnio(anio) {
   setTimeout(() => {
     contenedor.remove();
   }, 3500);
-      }
+    }
