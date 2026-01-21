@@ -99,11 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // 🎀 FUNCIÓN DE CELEBRACIÓN (AGREGADA)
 function celebrarAnio(anio) {
-  const yaCelebrado = localStorage.getItem("celebradoAnio" + anio);
-  if (yaCelebrado) return;
-
-  localStorage.setItem("celebradoAnio" + anio, "true");
-
   const contenedor = document.createElement("div");
   contenedor.className = "celebracion";
 
@@ -122,4 +117,4 @@ function celebrarAnio(anio) {
   setTimeout(() => {
     contenedor.remove();
   }, 3500);
-        }
+      }
